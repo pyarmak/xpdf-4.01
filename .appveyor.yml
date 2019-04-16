@@ -10,7 +10,6 @@ shallow_clone: true
 clone_depth: 1
 
 image:
-  - Visual Studio 2013 #VSVER {9,10,11,12}.0
   - Visual Studio 2015 #VSVER {9,10,11,12,14}.0
   - Visual Studio 2017 #VSVER ^^^^^^^^^^^^^^^^^ (msvc_2017 > program_files/msvs/2017)
 
@@ -23,33 +22,33 @@ environment:
     # visual studio 2013
     # qt 5.{3,4}
     # qt 5.5
-    - QTDIR: C:\Qt\5.5\msvc2013
-      cname: Win32-VS2013
-      VSVER: 12
-    - QTDIR: C:\Qt\5.5\msvc2013_64
-      cname: Win64-VS2013
-      VSVER: 12
-    # qt 5.6
-    - QTDIR: C:\Qt\5.6\msvc2013
-      cname: Win32-VS2013
-      VSVER: 12
-    - QTDIR: C:\Qt\5.6\msvc2013_64
-      cname: Win64-VS2013
-      VSVER: 12
-    # qt 5.7
-    - QTDIR: C:\Qt\5.7\msvc2013
-      cname: Win32-VS2013
-      VSVER: 12
-    - QTDIR: C:\Qt\5.7\msvc2013_64
-      cname: Win64-VS2013
-      VSVER: 12
-    # qt 5.8
-    - QTDIR: C:\Qt\5.8\msvc2013
-      cname: Win32-VS2013
-      VSVER: 12
-    - QTDIR: C:\Qt\5.8\msvc2013_64
-      cname: Win64-VS2013
-      VSVER: 12
+#    - QTDIR: C:\Qt\5.5\msvc2013
+#      cname: Win32-VS2013
+#      VSVER: 12
+#    - QTDIR: C:\Qt\5.5\msvc2013_64
+#      cname: Win64-VS2013
+#      VSVER: 12
+#    # qt 5.6
+#    - QTDIR: C:\Qt\5.6\msvc2013
+#      cname: Win32-VS2013
+#      VSVER: 12
+#    - QTDIR: C:\Qt\5.6\msvc2013_64
+#      cname: Win64-VS2013
+#      VSVER: 12
+#    # qt 5.7
+#    - QTDIR: C:\Qt\5.7\msvc2013
+#      cname: Win32-VS2013
+#      VSVER: 12
+#    - QTDIR: C:\Qt\5.7\msvc2013_64
+#      cname: Win64-VS2013
+#      VSVER: 12
+#    # qt 5.8
+#    - QTDIR: C:\Qt\5.8\msvc2013
+#      cname: Win32-VS2013
+#      VSVER: 12
+#    - QTDIR: C:\Qt\5.8\msvc2013_64
+#      cname: Win64-VS2013
+#      VSVER: 12
     # visual studio 2015
     # qt 5.6
     - QTDIR: C:\Qt\5.6\msvc2015
