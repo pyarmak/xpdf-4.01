@@ -132,20 +132,34 @@ install:
 #  - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64'
 
 before_build:
+  - if %ARCH%==x86 (set VCPKG_DEFAULT_TRIPLET=x86-windows) else (set VCPKG_DEFAULT_TRIPLET=x64-windows)
   - vcpkg install freetype libpng zlib
   - vcpkg list
 
 build_script:
+        #  - set CMAKE="cmake -G nNMake Makefiles' -DCMAKE_GENERATOR_PLATFORM=%ARCH% -DCMAKE_TOOLCHAIN_FILE=C:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake"
   - cd %APPVEYOR_BUILD_FOLDER%
-  - mkdir build
-  - cd build
-  - cmake -G "NMake Makefiles" -DCMAKE_TOOLCHAIN_FILE=C:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake ..
-  - '%make%'
+  - mkdir build-win32
+  - cd build-win32
+  - cmake -Wno-dev -G "Visual Studio %VSVER%" -DCMAKE_TOOLCHAIN_FILE=C:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake ..
+  - cd ..
+  - mkdir build-win64
+  - cd build-win64
+  - cmake -Wno-dev -G "Visual Studio %VSVER% Win64" -DCMAKE_TOOLCHAIN_FILE=C:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake ..
+  - cd ..
+  - cmake --build build-win32 --config Release
+  - cmake --build build-win64 --config Release
+# - cmake .. -G "NMake Makefiles" -DCMAKE_GENERATOR_PLATFORM=%ARCH% -DCMAKE_TOOLCHAIN_FILE=C:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake
 
 after_build:
   - cd %APPVEYOR_BUILD_FOLDER%
-  - 7z a build.zip build
+  - 7z a build-win32.zip build-win32
+  - 7z a build-win64.zip build-win64
 
 artifacts:
-  - path: build.zip
-    name: Xpdf
+  - path: build-win32.zip
+    name: Xpdf-win32
+  - path: build-win64.zip
+    name: Xpdf-win64
+cache: 
+  - c:\tools\vcpkg\installed\
