@@ -38,9 +38,8 @@ matrix:
 
 install:
   - set PATH=%PATH%;C:\msys64\bin
-  - call %sh% "pacman -Syu --noconfirm"
-  - call %sh% "udate-core"
-  - call %sh% "acman -Su --noconfirm"
+  - call %sh% "pacman -Syuu --noconfirm"
+  - call %sh% "pacman -Suu --noconfirm"
 
 before_build:
   - call %sh% "pacman -S --noconfirm cmake"
