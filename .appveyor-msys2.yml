@@ -54,15 +54,13 @@ build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
   - mkdir build
   - cd build
-# - call %sh% "cmake -Wno-dev -DPREFIX=../install ../"
-# - call %sh% "make install"
+  - call %sh% "cmake -Wno-dev -DPREFIX=../install ../"
+  - call %sh% "make install"
 
 after_build:
-# - cd %APPVEYOR_BUILD_FOLDER%
-# - 7z a install.zip install
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - 7z a install.zip install
 
 artifacts:
-# - path: install.zip
-#   name: xpdf-%MINGW%
-cache: 
-  - c:\msys64
+  - path: install.zip
+    name: xpdf-%MINGW%
