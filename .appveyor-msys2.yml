@@ -2,54 +2,67 @@ version: 1.0.{build}
 
 #msys provides `pacman` packge manager and uses mingw-w64-toolchain https://github.com/frankmorgner/openpace/blob/master/appveyor.yml
 
+image:
+  - Visual Studio 2017
+
 branches:
   only:
     - master
 
 shallow_clone: true
+
 clone_depth: 1
 
 environment:
+  global:
+    MSYSTEM: MSYS
+    sh: C:\msys64\usr\bin\sh -lc
+    pac_arg: -S --needed --noconfirm --noprogressbar
   matrix:
-#   - mingw_prefix: mingw-w64-i686
-#   - mingw_prefix: mingw-w64-x86_64
-    - pb: i #for   i686 packages
-    - pb: x #for x86_64 packages
+    - MINGW: mingw32
+      MBITS: 32
+      MPREF: i #i686
+    - MINGW: mingw64
+      MBITS: 64
+      MPREF: x #x86_64
 
-image:
-  - Visual Studio 2017
+#environment:
+#  matrix:
+##   - mingw_prefix: mingw-w64-i686
+##   - mingw_prefix: mingw-w64-x86_64
+#    - pb: i #for   i686 packages
+#    - pb: x #for x86_64 packages
+
+matrix:
+  fast_finish: true
 
 install:
-  - set PATH=%PATH%;C:\msys64\
-  - call msys2_shell.bat
-  - pacman -Syu --noconfirm
-  - update-core
-  - pacman -Su --noconfirm 
+  - set PATH=%PATH%;C:\msys64\bin
+  - call %sh% "pacman -Syu --noconfirm"
+  - call %sh% "udate-core"
+  - call %sh% "acman -Su --noconfirm"
 
 before_build:
-  - call msys2_shell.bat
-  - pacman -S --noconfirm cmake  
-# - pacman -S --noconfirm %mingw_prefix%-qt
-# - pacman -S --noconfirm %mingw_prefix%-quazip
-# - pacman -S --noconfirm %mingw_prefix%-poppler
-  - pacboy -S --noconfirm qt:%pb%
-  - pacboy -S --noconfirm quazip:%pb%
-  - pacboy -S --noconfirm poppler:%pb%
+  - call %sh% "pacman -S --noconfirm cmake"
+# - call %sh% "pacman -S --noconfirm %mingw_prefix%-qt"
+# - call %sh% "pacman -S --noconfirm %mingw_prefix%-quazip"
+# - call %sh% "pacman -S --noconfirm %mingw_prefix%-poppler"
+  - call %sh% "pacboy -S --noconfirm qt:%pb%"
+  - call %sh% "pacboy -S --noconfirm quazip:%pb%"
+  - call %sh% "pacboy -S --noconfirm poppler:%pb%"
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
-  - call msys2_shell.bat
   - mkdir -p build
   - cd build
-# - %MINGW_PREFIX%/bin/cmake -Wno-dev ..
-  - cmake -Wno-dev ..
-  - cd ..
+  - call %sh% "cmake -Wno-dev -DPREFIX=../install .."
+  - call %sh% "make install"
 
 after_build:
   - cd %APPVEYOR_BUILD_FOLDER%
-  - 7z a build.zip build
+  - 7z a install.zip install
 
 artifacts:
-  - path: build.zip
-    name: Xpdf-win32
+  - path: install.zip
+    name: xpdf-%MINGW%
 cache: 
