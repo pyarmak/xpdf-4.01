@@ -30,8 +30,8 @@ environment:
 #  matrix:
 ##   - mingw_prefix: mingw-w64-i686
 ##   - mingw_prefix: mingw-w64-x86_64
-#    - pb: i #for   i686 packages
-#    - pb: x #for x86_64 packages
+#    - MPREF: i #for   i686 packages
+#    - MPREF: x #for x86_64 packages
 
 matrix:
   fast_finish: true
@@ -46,9 +46,9 @@ before_build:
 # - call %sh% "pacman -S --noconfirm %mingw_prefix%-qt5"
 # - call %sh% "pacman -S --noconfirm %mingw_prefix%-quazip"
 # - call %sh% "pacman -S --noconfirm %mingw_prefix%-poppler"
-  - call %sh% "pacboy -S --noconfirm qt5:%pb%"
-  - call %sh% "pacboy -S --noconfirm quazip:%pb%"
-  - call %sh% "pacboy -S --noconfirm poppler:%pb%"
+  - call %sh% "pacboy -S debug --noconfirm     qt5:%MPREF%"
+  - call %sh% "pacboy -S debug --noconfirm  quazip:%MPREF%"
+  - call %sh% "pacboy -S debug --noconfirm poppler:%MPREF%"
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
