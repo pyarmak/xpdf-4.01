@@ -43,10 +43,10 @@ install:
 
 before_build:
   - call %sh% "pacman -S --noconfirm cmake"
-# - call %sh% "pacman -S --noconfirm %mingw_prefix%-qt"
+# - call %sh% "pacman -S --noconfirm %mingw_prefix%-qt5"
 # - call %sh% "pacman -S --noconfirm %mingw_prefix%-quazip"
 # - call %sh% "pacman -S --noconfirm %mingw_prefix%-poppler"
-  - call %sh% "pacboy -S --noconfirm qt:%pb%"
+  - call %sh% "pacboy -S --noconfirm qt5:%pb%"
   - call %sh% "pacboy -S --noconfirm quazip:%pb%"
   - call %sh% "pacboy -S --noconfirm poppler:%pb%"
 
