@@ -1,21 +1,16 @@
 version: 1.0.{build}
 
-#msys provides `pacman` packge manager and uses mingw-w64-toolchain https://github.com/frankmorgner/openpace/blob/master/appveyor.yml
-
 branches:
   only:
     - master
 
 shallow_clone: true
+
 clone_depth: 1
 
 image:
   - Visual Studio 2015 #VSVER {9,10,11,12,14}.0
   - Visual Studio 2017 #VSVER ^^^^^^^^^^^^^^^^^ (msvc_2017 > program_files/msvs/2017)
-
-#platform:
-#  - x64
-#  - x86
   
 environment:
   matrix:
@@ -91,10 +86,10 @@ environment:
 
 matrix:
   exclude:
-    - image: Visual Studio 2013
-      VSVER: 14
-    - image: Visual Studio 2013
-      VSVER: 15
+#   - image: Visual Studio 2013
+#     VSVER: 14
+#   - image: Visual Studio 2013
+#     VSVER: 15
     - image: Visual Studio 2015
       VSVER: 12
     - image: Visual Studio 2015
@@ -103,17 +98,18 @@ matrix:
       VSVER: 12
     - image: Visual Studio 2017
       VSVER: 14
-#  fast_finish: true
+# fast_finish: true
   allow_failures:
-    - cname: Win64-VS2015
     - cname: Win64-VS2017
-    - cname: Win32-VS2017
 
 install:
+# init qt environment
   - '%QTDIR%\bin\qtenv2.bat'
-  - if %QTDIR:_64=%==%QTDIR% ( set ARCH=x86 ) else set ARCH=x64
+# init windows sdk
 # SDKs\2013:{Azure,Windows\{6.0a,7.0,7.1}},2015:{Azura,Service Fabric,Windows},2017:{Azure,Service Fabric}
+  - if %QTDIR:_64=%==%QTDIR% ( set ARCH=x86 ) else set ARCH=x64
   - if %ARCH%==x64 if not %VSVER%==15 call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
+# init Visual Studio environment
   - ps: >-
         If ($env:VSVER -Match "15") {
             $env:VSINIT="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat"
@@ -123,33 +119,17 @@ install:
         }
   - echo "Using Visual Studio %VSVER% at %VSCOMNTOOLS%"
   - call "%VSINIT%" %ARCH%
-  - if %cname%==mingw set make=mingw32-make.exe
-  - if %cname%==mingw g++ --version
-  - if %cname%==mingw %make% --version
-  - if not %cname%==mingw set make=nmake.exe
-  - if not %cname%==mingw %make% /? > nul
-  - if %cname%==mingw set PATH=%PATH%;%QTDIR%\bin;C:\MinGW\bin;C:\tools\vcpkg
-#  - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64'
 
 before_build:
   - if %ARCH%==x86 (set VCPKG_DEFAULT_TRIPLET=x86-windows) else (set VCPKG_DEFAULT_TRIPLET=x64-windows)
   - vcpkg install freetype libpng zlib
-  - vcpkg list
 
 build_script:
-        #  - set CMAKE="cmake -G nNMake Makefiles' -DCMAKE_GENERATOR_PLATFORM=%ARCH% -DCMAKE_TOOLCHAIN_FILE=C:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake"
   - cd %APPVEYOR_BUILD_FOLDER%
-  - mkdir build-win32
-  - cd build-win32
-  - cmake -Wno-dev -G "Visual Studio %VSVER%" -DCMAKE_TOOLCHAIN_FILE=C:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake ..
-  - cd ..
-  - mkdir build-win64
-  - cd build-win64
-  - cmake -Wno-dev -G "Visual Studio %VSVER% Win64" -DCMAKE_TOOLCHAIN_FILE=C:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake ..
-  - cd ..
+  - cmake -Wno-dev -G "Visual Studio %VSVER%"       -B build-win32 -DCMAKE_TOOLCHAIN_FILE=C:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake .
+  - cmake -Wno-dev -G "Visual Studio %VSVER% Win64" -B build-win64 -DCMAKE_TOOLCHAIN_FILE=C:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake .
   - cmake --build build-win32 --config Release
   - cmake --build build-win64 --config Release
-# - cmake .. -G "NMake Makefiles" -DCMAKE_GENERATOR_PLATFORM=%ARCH% -DCMAKE_TOOLCHAIN_FILE=C:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake
 
 after_build:
   - cd %APPVEYOR_BUILD_FOLDER%
