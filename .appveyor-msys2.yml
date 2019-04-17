@@ -37,25 +37,26 @@ matrix:
   fast_finish: true
 
 install:
-  - set PATH=%PATH%;C:\msys64\bin
+  - set PATH=C:\msys64\usr\bin;%PATH%
   - call %sh% "pacman -Syuu --noconfirm"
-    #  - call %sh% "pacman -Suu --noconfirm"
-    #
-    #before_build:
-    #  - call %sh% "pacman -S --noconfirm cmake"
-    ## - call %sh% "pacman -S --noconfirm %mingw_prefix%-qt5"
-    ## - call %sh% "pacman -S --noconfirm %mingw_prefix%-quazip"
-    ## - call %sh% "pacman -S --noconfirm %mingw_prefix%-poppler"
-    #  - call %sh% "pacboy -S debug --noconfirm     qt5:%MPREF%"
-    #  - call %sh% "pacboy -S debug --noconfirm  quazip:%MPREF%"
-    #  - call %sh% "pacboy -S debug --noconfirm poppler:%MPREF%"
+# - call %sh% "pacman -Suu --noconfirm"
+
+before_build:
+  - call %sh% "pacman -S --noconfirm cmake"
+# - call %sh% "pacman -S --noconfirm %mingw_prefix%-qt5"
+# - call %sh% "pacman -S --noconfirm %mingw_prefix%-quazip"
+# - call %sh% "pacman -S --noconfirm %mingw_prefix%-poppler"
+  - call %sh% "pacboy -S debug --noconfirm     qt5:%MPREF%"
+  - call %sh% "pacboy -S debug --noconfirm  quazip:%MPREF%"
+  - call %sh% "pacboy -S debug --noconfirm poppler:%MPREF%"
+  - where cmake
+  - where make
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
   - mkdir build
   - cd build
-  - ls ..
-  - call %sh% "cmake -Wno-dev -DPREFIX=../install ../CMakeLists.txt"
+  - cmake -Wno-dev -DPREFIX=../install ..
   - call %sh% "make install"
 
 after_build:
