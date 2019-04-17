@@ -1,0 +1,55 @@
+version: 1.0.{build}
+
+#msys provides `pacman` packge manager and uses mingw-w64-toolchain https://github.com/frankmorgner/openpace/blob/master/appveyor.yml
+
+branches:
+  only:
+    - master
+
+shallow_clone: true
+clone_depth: 1
+
+environment:
+  matrix:
+#   - mingw_prefix: mingw-w64-i686
+#   - mingw_prefix: mingw-w64-x86_64
+    - pb: i #for   i686 packages
+    - pb: x #for x86_64 packages
+
+image:
+  - Visual Studio 2017
+
+install:
+  - set PATH=%PATH%;C:\msys64\
+  - call msys2_shell.bat
+  - pacman -Syu --noconfirm
+  - update-core
+  - pacman -Su --noconfirm 
+
+before_build:
+  - call msys2_shell.bat
+  - pacman -S --noconfirm cmake  
+# - pacman -S --noconfirm %mingw_prefix%-qt
+# - pacman -S --noconfirm %mingw_prefix%-quazip
+# - pacman -S --noconfirm %mingw_prefix%-poppler
+  - pacboy -S --noconfirm qt:%pb%
+  - pacboy -S --noconfirm quazip:%pb%
+  - pacboy -S --noconfirm poppler:%pb%
+
+build_script:
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - call msys2_shell.bat
+  - mkdir -p build
+  - cd build
+# - %MINGW_PREFIX%/bin/cmake -Wno-dev ..
+  - cmake -Wno-dev ..
+  - cd ..
+
+after_build:
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - 7z a build.zip build
+
+artifacts:
+  - path: build.zip
+    name: Xpdf-win32
+cache: 
