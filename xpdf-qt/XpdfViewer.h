@@ -314,6 +314,7 @@ private:
   void cmdScrollToRightEdge(GString *args[], int nArgs, QInputEvent *event);
   void cmdScrollToTopEdge(GString *args[], int nArgs, QInputEvent *event);
   void cmdScrollToTopLeft(GString *args[], int nArgs, QInputEvent *event);
+  void cmdScrollToCentered(GString *args[], int nArgs, QInputEvent *event);
   void cmdScrollUp(GString *args[], int nArgs, QInputEvent *event);
   void cmdScrollUpPrevPage(GString *args[], int nArgs, QInputEvent *event);
   void cmdSetSelection(GString *args[], int nArgs, QInputEvent *event);
