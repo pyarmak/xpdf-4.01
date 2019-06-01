@@ -191,6 +191,7 @@ XpdfViewerCmd XpdfViewer::cmdTab[] = {
   { "scrollToRightEdge",       0, gTrue,  gFalse, &XpdfViewer::cmdScrollToRightEdge },
   { "scrollToTopEdge",         0, gTrue,  gFalse, &XpdfViewer::cmdScrollToTopEdge },
   { "scrollToTopLeft",         0, gTrue,  gFalse, &XpdfViewer::cmdScrollToTopLeft },
+  { "scrollToCentered",        0, gTrue,  gFalse, &XpdfViewer::cmdScrollToCentered },
   { "scrollUp",                1, gTrue,  gFalse, &XpdfViewer::cmdScrollUp },
   { "scrollUpPrevPage",        1, gTrue,  gFalse, &XpdfViewer::cmdScrollUpPrevPage },
   { "setSelection",            5, gTrue,  gFalse, &XpdfViewer::cmdSetSelection },
@@ -1819,6 +1820,11 @@ void XpdfViewer::cmdScrollToTopEdge(GString *args[], int nArgs,
 void XpdfViewer::cmdScrollToTopLeft(GString *args[], int nArgs,
 				    QInputEvent *event) {
   currentTab->pdf->getCore()->scrollToTopLeft();
+}
+
+void XpdfViewer::cmdScrollToCentered(GString *args[], int nArgs,
+            QInputEvent *event) {
+  currentTab->pdf->getCore()->scrollToCentered();
 }
 
 void XpdfViewer::cmdScrollUp(GString *args[], int nArgs,
