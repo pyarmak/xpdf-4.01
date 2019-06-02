@@ -1824,9 +1824,9 @@ void XpdfViewer::cmdScrollToTopLeft(GString *args[], int nArgs,
 
 void XpdfViewer::cmdScrollToCentered(GString *args[], int nArgs,
             QInputEvent *event) {
-  int dx = currentTab->pdf->getPageWidth() / 2;
-  int dy = currentTab->pdf->getPageHeight() / 2;
   int page = currentTab->pdf->getCurrentPage();
+  int dx = currentTab->pdf->getPageWidth(page) / 2;
+  int dy = currentTab->pdf->getPageHeight(page) / 2;
   currentTab->pdf->getCore()->scrollToCentered(page, dx, dy);
 }
 
