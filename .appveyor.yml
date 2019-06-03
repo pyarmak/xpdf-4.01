@@ -138,11 +138,11 @@ build_script:
   - copy %QTDIR%\bin\Qt5OpenGL.dll  %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release
   - copy %QTDIR%\bin\Qt5Widgets.dll %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release
   - copy %QTDIR%\bin\Qt5Network.dll %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release
-  - mkdir %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release\platforms
+  - mkdir %DESTDIR%\xpdf-qt\Release\platforms
   - copy %QTDIR%\plugins\platforms\qwindows.dll %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release\platforms
-  - mkdir %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release\printsupport
+  - mkdir %DESTDIR%\xpdf-qt\Release\printsupport
   - copy %QTDIR%\plugins\printsupport\windowsprintersupport.dll %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release\printsupport
-  - mkdir %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release\imageformats
+  - mkdir %DESTDIR%\xpdf-qt\Release\imageformats
   - copy %QTDIR%\plugins\imageformats\qsvg.dll %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release\imageformats
 
 after_build:
