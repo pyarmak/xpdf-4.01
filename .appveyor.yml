@@ -141,9 +141,9 @@ build_script:
   - mkdir %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release\platforms
   - copy %QTDIR%\plugins\platforms\qwindows.dll %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release\platforms
   - mkdir %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release\printsupport
-  - copy %QTDIR%\plugins\platforms\plugins\printsupport\windowsprintersupport.dll %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release\printsupport
+  - copy %QTDIR%\plugins\printsupport\windowsprintersupport.dll %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release\printsupport
   - mkdir %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release\imageformats
-  - copy %QTDIR%\plugins\platforms\plugins\imageformats\qsvg.dll %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release\imageformats
+  - copy %QTDIR%\plugins\imageformats\qsvg.dll %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release\imageformats
 
 after_build:
   - cd %APPVEYOR_BUILD_FOLDER%
