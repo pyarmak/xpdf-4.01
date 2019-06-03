@@ -135,7 +135,7 @@ after_build:
   - cd %APPVEYOR_BUILD_FOLDER%
     # copy Qt DLL into bin
   - if %ARCH%==x64 ( set DESTDIR=build-win64 ) else set DESTDIR=build-win32
-  - echo "Copying Qt files over from %QTDIR%"
+  - echo "Copying Qt files over from %QTDIR% to %DESTDIR%\xpdf-qt\Release"
   - copy %QTDIR%\bin\Qt5Core.dll    %DESTDIR%\xpdf-qt\Release
   - copy %QTDIR%\bin\Qt5Gui.dll     %DESTDIR%\xpdf-qt\Release
   - copy %QTDIR%\bin\Qt5Xml.dll     %DESTDIR%\xpdf-qt\Release
