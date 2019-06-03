@@ -46,12 +46,12 @@ environment:
 #      VSVER: 12
     # visual studio 2015
     # qt 5.6
-    # - QTDIR: C:\Qt\5.6\msvc2015
-    #   cname: Win32-VS2015
-    #   VSVER: 14
-    # - QTDIR: C:\Qt\5.6\msvc2015_64
-    #   cname: Win64-VS2015
-    #   VSVER: 14
+    - QTDIR: C:\Qt\5.6\msvc2015
+      cname: Win32-VS2015
+      VSVER: 14
+    - QTDIR: C:\Qt\5.6\msvc2015_64
+      cname: Win64-VS2015
+      VSVER: 14
     # qt 5.7 only 32 bit
     # qt 5.9
     - QTDIR: C:\Qt\5.9\msvc2015
@@ -99,15 +99,14 @@ matrix:
     - image: Visual Studio 2017
       VSVER: 14
 # fast_finish: true
-  # allow_failures:
-  #   - cname: Win64-VS2017
+  allow_failures:
+    - cname: Win64-VS2017
 
 install:
 # init qt environment
   - '%QTDIR%\bin\qtenv2.bat'
 # init windows sdk
 # SDKs\2013:{Azure,Windows\{6.0a,7.0,7.1}},2015:{Azura,Service Fabric,Windows},2017:{Azure,Service Fabric}
-  - set QTCDIR=%QTDIR%
   - if %QTDIR:_64=%==%QTDIR% ( set ARCH=x86 ) else set ARCH=x64
   - if %ARCH%==x64 if not %VSVER%==15 call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
 # init Visual Studio environment
@@ -127,27 +126,27 @@ before_build:
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
-  - if %ARCH%==x64 ( set DESTDIR=build-win64 ) else set DESTDIR=build-win32
   - cmake -Wno-dev -G "Visual Studio %VSVER%"       -B build-win32 -DCMAKE_TOOLCHAIN_FILE=C:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake .
   - cmake -Wno-dev -G "Visual Studio %VSVER% Win64" -B build-win64 -DCMAKE_TOOLCHAIN_FILE=C:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake .
   - cmake --build build-win32 --config Release
   - cmake --build build-win64 --config Release
-  # copy Qt DLL into bin
-  - copy %QTCDIR%\bin\Qt5Core.dll    %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt
-  - copy %QTCDIR%\bin\Qt5Gui.dll     %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt
-  - copy %QTCDIR%\bin\Qt5Xml.dll     %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt
-  - copy %QTCDIR%\bin\Qt5OpenGL.dll  %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt
-  - copy %QTCDIR%\bin\Qt5Widgets.dll %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt
-  - copy %QTCDIR%\bin\Qt5Network.dll %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt
-  - mkdir %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\platforms
-  - copy %QTCDIR%\plugins\platforms\qwindows.dll %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\platforms
+    # copy Qt DLL into bin
+  - echo "Copying files over from %QTDIR%"
+  - copy %QTDIR%\bin\Qt5Core.dll    %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release
+  - copy %QTDIR%\bin\Qt5Gui.dll     %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release
+  - copy %QTDIR%\bin\Qt5Xml.dll     %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release
+  - copy %QTDIR%\bin\Qt5OpenGL.dll  %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release
+  - copy %QTDIR%\bin\Qt5Widgets.dll %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release
+  - copy %QTDIR%\bin\Qt5Network.dll %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release
+  - mkdir %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release\platforms
+  - copy %QTDIR%\plugins\platforms\qwindows.dll %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release\platforms
+  - mkdir %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release\printsupport
+  - copy %QTDIR%\plugins\platforms\plugins\printsupport\windowsprintersupport.dll %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release\printsupport
+  - mkdir %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release\imageformats
+  - copy %QTDIR%\plugins\platforms\plugins\imageformats\qsvg.dll %APPVEYOR_BUILD_FOLDER%\%DESTDIR%\xpdf-qt\Release\imageformats
 
 after_build:
   - cd %APPVEYOR_BUILD_FOLDER%
-  # - if %ARCH%==x86 copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\vcruntime140.dll" "%APPVEYOR_BUILD_FOLDER%\build-win32\xpdf-qt\vcruntime140.dll"
-  # - if %ARCH%==x86 copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll" "%APPVEYOR_BUILD_FOLDER%\build-win32\xpdf-qt\msvcp140.dll"
-  # - if %ARCH%==x64 copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\vcruntime140.dll" "%APPVEYOR_BUILD_FOLDER%\build-win64\xpdf-qt\vcruntime140.dll"
-  # - if %ARCH%==x64 copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\msvcp140.dll" "%APPVEYOR_BUILD_FOLDER%\build-win64\xpdf-qt\msvcp140.dll"
   - 7z a build-win32.zip build-win32
   - 7z a build-win64.zip build-win64
 
