@@ -134,17 +134,17 @@ build_script:
 after_build:
   - cd %APPVEYOR_BUILD_FOLDER%
     # copy Qt DLL into bin
-  - if %ARCH%==x64 ( set DESTDIR=build-win64 ) else set DESTDIR=build-win32
-  - echo "Copying Qt files over from %QTDIR% to %DESTDIR%\xpdf-qt\Release"
-  - copy %QTDIR%\bin\Qt5Core.dll    %DESTDIR%\xpdf-qt\Release
-  - copy %QTDIR%\bin\Qt5Gui.dll     %DESTDIR%\xpdf-qt\Release
-  - copy %QTDIR%\bin\Qt5Xml.dll     %DESTDIR%\xpdf-qt\Release
-  - copy %QTDIR%\bin\Qt5OpenGL.dll  %DESTDIR%\xpdf-qt\Release
-  - copy %QTDIR%\bin\Qt5Widgets.dll %DESTDIR%\xpdf-qt\Release
-  - copy %QTDIR%\bin\Qt5Network.dll %DESTDIR%\xpdf-qt\Release
-  - copy %QTDIR%\plugins\platforms\qwindows.dll %DESTDIR%\xpdf-qt\Release
-  - copy %QTDIR%\plugins\printsupport\windowsprintersupport.dll %DESTDIR%\xpdf-qt\Release
-  - copy %QTDIR%\plugins\imageformats\qsvg.dll %DESTDIR%\xpdf-qt\Release
+  - if %ARCH%==x64 (set DESTDIR=build-win64\xpdf-qt\Release) else set DESTDIR=build-win32\xpdf-qt\Release
+  - echo "Copying Qt files over from %QTDIR% to %DESTDIR%"
+  - copy %QTDIR%\bin\Qt5Core.dll    %DESTDIR%
+  - copy %QTDIR%\bin\Qt5Gui.dll     %DESTDIR%
+  - copy %QTDIR%\bin\Qt5Xml.dll     %DESTDIR%
+  - copy %QTDIR%\bin\Qt5OpenGL.dll  %DESTDIR%
+  - copy %QTDIR%\bin\Qt5Widgets.dll %DESTDIR%
+  - copy %QTDIR%\bin\Qt5Network.dll %DESTDIR%
+  - copy %QTDIR%\plugins\platforms\qwindows.dll %DESTDIR%
+  - copy %QTDIR%\plugins\printsupport\windowsprintersupport.dll %DESTDIR%
+  - copy %QTDIR%\plugins\imageformats\qsvg.dll %DESTDIR%
   - 7z a build-win32.zip build-win32
   - 7z a build-win64.zip build-win64
 
