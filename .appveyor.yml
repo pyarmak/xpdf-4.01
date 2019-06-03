@@ -10,7 +10,7 @@ clone_depth: 1
 
 image:
   - Visual Studio 2015 #VSVER {9,10,11,12,14}.0
-  - Visual Studio 2017 #VSVER ^^^^^^^^^^^^^^^^^ (msvc_2017 > program_files/msvs/2017)
+  # - Visual Studio 2017 #VSVER ^^^^^^^^^^^^^^^^^ (msvc_2017 > program_files/msvs/2017)
   
 environment:
   matrix:
@@ -46,12 +46,12 @@ environment:
 #      VSVER: 12
     # visual studio 2015
     # qt 5.6
-    - QTDIR: C:\Qt\5.6\msvc2015
-      cname: Win32-VS2015
-      VSVER: 14
-    - QTDIR: C:\Qt\5.6\msvc2015_64
-      cname: Win64-VS2015
-      VSVER: 14
+    # - QTDIR: C:\Qt\5.6\msvc2015
+    #   cname: Win32-VS2015
+    #   VSVER: 14
+    # - QTDIR: C:\Qt\5.6\msvc2015_64
+    #   cname: Win64-VS2015
+    #   VSVER: 14
     # qt 5.7 only 32 bit
     # qt 5.9
     - QTDIR: C:\Qt\5.9\msvc2015
@@ -77,12 +77,12 @@ environment:
     # visual studio 2017
     # %QTDIR%\bin\qtenv2.bat not found
     # qt 5.12
-    - QTDIR: C:\Qt\5.12\msvc2017
-      cname: Win32-VS2017
-      VSVER: 15
-    - QTDIR: C:\Qt\5.12\msvc2017_64
-      cname: Win64-VS2017
-      VSVER: 15
+    # - QTDIR: C:\Qt\5.12\msvc2017
+    #   cname: Win32-VS2017
+    #   VSVER: 15
+    # - QTDIR: C:\Qt\5.12\msvc2017_64
+    #   cname: Win64-VS2017
+    #   VSVER: 15
 
 matrix:
   exclude:
@@ -94,13 +94,13 @@ matrix:
       VSVER: 12
     - image: Visual Studio 2015
       VSVER: 15
-    - image: Visual Studio 2017
-      VSVER: 12
-    - image: Visual Studio 2017
-      VSVER: 14
+    # - image: Visual Studio 2017
+    #   VSVER: 12
+    # - image: Visual Studio 2017
+    #   VSVER: 14
 # fast_finish: true
-  allow_failures:
-    - cname: Win64-VS2017
+  # allow_failures:
+  #   - cname: Win64-VS2017
 
 install:
 # init qt environment
@@ -130,9 +130,19 @@ build_script:
   - cmake -Wno-dev -G "Visual Studio %VSVER% Win64" -B build-win64 -DCMAKE_TOOLCHAIN_FILE=C:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake .
   - cmake --build build-win32 --config Release
   - cmake --build build-win64 --config Release
+    # copy Qt DLL into bin
+  - copy %QTDIR%\bin\Qt5Core.dll    %APPVEYOR_BUILD_FOLDER%
+  - copy %QTDIR%\bin\Qt5Gui.dll     %APPVEYOR_BUILD_FOLDER%
+  - copy %QTDIR%\bin\Qt5Xml.dll     %APPVEYOR_BUILD_FOLDER%
+  - copy %QTDIR%\bin\Qt5OpenGL.dll  %APPVEYOR_BUILD_FOLDER%
+  - copy %QTDIR%\bin\Qt5Widgets.dll %APPVEYOR_BUILD_FOLDER%
+  - mkdir %APPVEYOR_BUILD_FOLDER%\platforms
+  - copy %QTDIR%\plugins\platforms\qwindows.dll %APPVEYOR_BUILD_FOLDER%\platforms
 
 after_build:
   - cd %APPVEYOR_BUILD_FOLDER%
+  - copy "%VCINSTALLDIR%\redist\x86\Microsoft.VC140.CRT\vcruntime140.dll" build-win32
+  - copy "%VCINSTALLDIR%\redist\x64\Microsoft.VC140.CRT\vcruntime140.dll" build-win64
   - 7z a build-win32.zip build-win32
   - 7z a build-win64.zip build-win64
 
