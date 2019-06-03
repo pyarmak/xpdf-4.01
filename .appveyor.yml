@@ -141,10 +141,10 @@ build_script:
 
 after_build:
   - cd %APPVEYOR_BUILD_FOLDER%
-  - if %ARCH%==x86 copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\vcruntime140.dll" "%APPVEYOR_BUILD_FOLDER%\build-win32\vcruntime140.dll"
-  - if %ARCH%==x86 copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll" "%APPVEYOR_BUILD_FOLDER%\build-win32\msvcp140.dll"
-  - if %ARCH%==x64 copy "C:\Program Files\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\vcruntime140.dll" "%APPVEYOR_BUILD_FOLDER%\build-win64\vcruntime140.dll"
-  - if %ARCH%==x64 copy "C:\Program Files\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\msvcp140.dll" "%APPVEYOR_BUILD_FOLDER%\build-win64\msvcp140.dll"
+  - copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\vcruntime140.dll" "%APPVEYOR_BUILD_FOLDER%\build-win32\xpdf-qt\vcruntime140.dll"
+  - copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll" "%APPVEYOR_BUILD_FOLDER%\build-win32\xpdf-qt\msvcp140.dll"
+  - copy "C:\Program Files\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\vcruntime140.dll" "%APPVEYOR_BUILD_FOLDER%\build-win64\xpdf-qt\vcruntime140.dll"
+  - copy "C:\Program Files\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\msvcp140.dll" "%APPVEYOR_BUILD_FOLDER%\build-win64\xpdf-qt\msvcp140.dll"
   - 7z a build-win32.zip build-win32
   - 7z a build-win64.zip build-win64
 
