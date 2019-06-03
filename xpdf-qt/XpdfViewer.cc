@@ -187,11 +187,11 @@ XpdfViewerCmd XpdfViewer::cmdTab[] = {
   { "scrollRight",             1, gTrue,  gFalse, &XpdfViewer::cmdScrollRight },
   { "scrollToBottomEdge",      0, gTrue,  gFalse, &XpdfViewer::cmdScrollToBottomEdge },
   { "scrollToBottomRight",     0, gTrue,  gFalse, &XpdfViewer::cmdScrollToBottomRight },
+  { "scrollToCentered",        0, gTrue,  gFalse, &XpdfViewer::cmdScrollToCentered },
   { "scrollToLeftEdge",        0, gTrue,  gFalse, &XpdfViewer::cmdScrollToLeftEdge },
   { "scrollToRightEdge",       0, gTrue,  gFalse, &XpdfViewer::cmdScrollToRightEdge },
   { "scrollToTopEdge",         0, gTrue,  gFalse, &XpdfViewer::cmdScrollToTopEdge },
   { "scrollToTopLeft",         0, gTrue,  gFalse, &XpdfViewer::cmdScrollToTopLeft },
-  { "scrollToCentered",        0, gTrue,  gFalse, &XpdfViewer::cmdScrollToCentered },
   { "scrollUp",                1, gTrue,  gFalse, &XpdfViewer::cmdScrollUp },
   { "scrollUpPrevPage",        1, gTrue,  gFalse, &XpdfViewer::cmdScrollUpPrevPage },
   { "setSelection",            5, gTrue,  gFalse, &XpdfViewer::cmdSetSelection },
@@ -1802,6 +1802,15 @@ void XpdfViewer::cmdScrollToBottomRight(GString *args[], int nArgs,
   currentTab->pdf->getCore()->scrollToBottomRight();
 }
 
+void XpdfViewer::cmdScrollToCentered(GString *args[], int nArgs,
+            QInputEvent *event) {
+  int page = currentTab->pdf->getCurrentPage();
+  int dx = currentTab->pdf->getPageWidth(page) / 2;
+  int dy = currentTab->pdf->getPageHeight(page) / 2;
+  currentTab->pdf->getCore()->scrollToCentered(page, dx, dy);
+}
+
+
 void XpdfViewer::cmdScrollToLeftEdge(GString *args[], int nArgs,
 				     QInputEvent *event) {
   currentTab->pdf->getCore()->scrollToLeftEdge();
@@ -1820,14 +1829,6 @@ void XpdfViewer::cmdScrollToTopEdge(GString *args[], int nArgs,
 void XpdfViewer::cmdScrollToTopLeft(GString *args[], int nArgs,
 				    QInputEvent *event) {
   currentTab->pdf->getCore()->scrollToTopLeft();
-}
-
-void XpdfViewer::cmdScrollToCentered(GString *args[], int nArgs,
-            QInputEvent *event) {
-  int page = currentTab->pdf->getCurrentPage();
-  int dx = currentTab->pdf->getPageWidth(page) / 2;
-  int dy = currentTab->pdf->getPageHeight(page) / 2;
-  currentTab->pdf->getCore()->scrollToCentered(page, dx, dy);
 }
 
 void XpdfViewer::cmdScrollUp(GString *args[], int nArgs,
