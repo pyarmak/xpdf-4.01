@@ -130,7 +130,7 @@ build_script:
   - cmake -Wno-dev -G "Visual Studio %VSVER% Win64" -B build-win64 -DCMAKE_TOOLCHAIN_FILE=C:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake .
   - cmake --build build-win32 --config Release
   - cmake --build build-win64 --config Release
-    # copy Qt DLL into bin
+  # copy Qt DLL into bin
   - copy %QTDIR%\bin\Qt5Core.dll    %APPVEYOR_BUILD_FOLDER%
   - copy %QTDIR%\bin\Qt5Gui.dll     %APPVEYOR_BUILD_FOLDER%
   - copy %QTDIR%\bin\Qt5Xml.dll     %APPVEYOR_BUILD_FOLDER%
@@ -141,8 +141,10 @@ build_script:
 
 after_build:
   - cd %APPVEYOR_BUILD_FOLDER%
-  - copy "%VCINSTALLDIR%\redist\x86\Microsoft.VC140.CRT\vcruntime140.dll" build-win32
-  - copy "%VCINSTALLDIR%\redist\x64\Microsoft.VC140.CRT\vcruntime140.dll" build-win64
+  - if %ARCH%==x86 copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\vcruntime140.dll" "%APPVEYOR_BUILD_FOLDER%\build-win32\vcruntime140.dll"
+  - if %ARCH%==x86 copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll" "%APPVEYOR_BUILD_FOLDER%\build-win32\msvcp140.dll"
+  - if %ARCH%==x64 copy "C:\Program Files\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\vcruntime140.dll" "%APPVEYOR_BUILD_FOLDER%\build-win64\vcruntime140.dll"
+  - if %ARCH%==x64 copy "C:\Program Files\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\msvcp140.dll" "%APPVEYOR_BUILD_FOLDER%\build-win64\msvcp140.dll"
   - 7z a build-win32.zip build-win32
   - 7z a build-win64.zip build-win64
 
