@@ -142,9 +142,12 @@ after_build:
   - copy %QTDIR%\bin\Qt5OpenGL.dll  %DESTDIR%
   - copy %QTDIR%\bin\Qt5Widgets.dll %DESTDIR%
   - copy %QTDIR%\bin\Qt5Network.dll %DESTDIR%
-  - copy %QTDIR%\plugins\platforms\qwindows.dll %DESTDIR%
-  - copy %QTDIR%\plugins\printsupport\windowsprintersupport.dll %DESTDIR%
-  - copy %QTDIR%\plugins\imageformats\qsvg.dll %DESTDIR%
+  - mkdir %DESTDIR%\platforms
+  - mkdir %DESTDIR%\printsupport
+  - mkdir %DESTDIR%\imageformats
+  - copy %QTDIR%\plugins\platforms\qwindows.dll %DESTDIR%\platforms\
+  - copy %QTDIR%\plugins\printsupport\windowsprintersupport.dll %DESTDIR%\printsupport\
+  - copy %QTDIR%\plugins\imageformats\qsvg.dll %DESTDIR%\imageformats\
   - 7z a build-win32.zip build-win32
   - 7z a build-win64.zip build-win64
 
